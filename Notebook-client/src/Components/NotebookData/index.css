@@ -1,0 +1,38 @@
+label,
+input,
+textarea,
+select {
+  width: 100%;
+  display: block;
+  margin-top: 2%;
+  padding: 2%;
+}
+input[type="text"] {
+  margin-top: 2%;
+}
+.formData {
+  padding-top: 5%;
+}
+button.submit {
+  width: 30%;
+  margin: 4% auto;
+  padding: 1%;
+  font-size: 25px;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
+  cursor: pointer;
+  background-color: rgb(24, 23, 22);
+  border: none;
+  height: 13%;
+  color: whitesmoke;
+  /* box-shadow: 5px 5px 5px 5px whitesmoke; */
+}
+button.submit:hover {
+  background-color: rgb(67, 204, 174);
+  transition: 1s ease in;
+}
+
+label {
+  text-decoration: underline;
+  font-size: 20px;
+  color: rgb(31, 51, 51);
+}
