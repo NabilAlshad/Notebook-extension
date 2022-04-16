@@ -178,8 +178,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
-/* harmony import */ var _NotebookData_NotebookData__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../NotebookData/NotebookData */ "./src/Components/NotebookData/NotebookData.tsx");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+/* harmony import */ var _NotebookData_NotebookData__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../NotebookData/NotebookData */ "./src/Components/NotebookData/NotebookData.tsx");
+/* harmony import */ var _NoteLists_NoteLists__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../NoteLists/NoteLists */ "./src/Components/NoteLists/NoteLists.tsx");
+
+
 
 
 const Home = () => {
@@ -187,10 +192,51 @@ const Home = () => {
         console.log(tabs[0].url);
         // var currentTab = tabs[0].url;
     });
-    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement("div", null,
-        react__WEBPACK_IMPORTED_MODULE_0__.createElement(_NotebookData_NotebookData__WEBPACK_IMPORTED_MODULE_1__.default, null)));
+    const googleLoginButton = () => {
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get("");
+    };
+    return (react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null,
+        react__WEBPACK_IMPORTED_MODULE_1__.createElement(_NotebookData_NotebookData__WEBPACK_IMPORTED_MODULE_2__.default, null),
+        react__WEBPACK_IMPORTED_MODULE_1__.createElement(_NoteLists_NoteLists__WEBPACK_IMPORTED_MODULE_3__.default, null),
+        react__WEBPACK_IMPORTED_MODULE_1__.createElement("button", null, "Login with google")));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Home);
+
+
+/***/ }),
+
+/***/ "./src/Components/NoteLists/NoteLists.tsx":
+/*!************************************************!*\
+  !*** ./src/Components/NoteLists/NoteLists.tsx ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* export default binding */ __WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
+
+
+[];
+/* harmony default export */ function __WEBPACK_DEFAULT_EXPORT__() {
+    const [lists, setLists] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)();
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://localhost:4300/form/noteLists")
+            .then((response) => {
+            // console.log(response.data);
+            const data = response.data;
+            console.log(data);
+            setLists(data);
+        })
+            .catch((error) => console.error(error));
+    }, []);
+    console.log(lists);
+    return (react__WEBPACK_IMPORTED_MODULE_1__.createElement("div", null,
+        react__WEBPACK_IMPORTED_MODULE_1__.createElement("h1", null, "Bookmars")));
+}
 
 
 /***/ }),
@@ -225,7 +271,13 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
 
 
 
+// interface iavailableCategory{
+//   category: [string];
+// }
 const NotebookData = () => {
+    //states declarations
+    const [officialCategory, setofficialCategory] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)([""]);
+    const [isChange, setisChange] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
     const [noteData, setNoteData] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({});
     const [urlLink, seturlLink] = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)("");
     const titleRef = (0,react__WEBPACK_IMPORTED_MODULE_1__.useRef)();
@@ -236,6 +288,17 @@ const NotebookData = () => {
         console.log(tabs[0].url);
         seturlLink(tabs[0].url);
     });
+    //loading official category
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+        axios__WEBPACK_IMPORTED_MODULE_0___default().get("http://localhost:4300/official/get")
+            .then((response) => {
+            const data = response.data.data.availableCategory;
+            // console.log({ response: response.data.data.availableCategory}); //log to the console of official category
+            setofficialCategory(data);
+        })
+            .catch((error) => console.error(error));
+    }, []);
+    //post category to the browser
     const handleSubmit = () => __awaiter(void 0, void 0, void 0, function* () {
         setNoteData({
             title: titleRef.current.value,
@@ -244,14 +307,13 @@ const NotebookData = () => {
             category: categoryRef.current.value,
             newCategory: newCategoryRef.current.value,
         });
-        console.log("this is noteData", noteData);
-        // const {newCategory}=noteData;
-        console.log("i am clicked");
-        axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:3400/form/", noteData)
+        setisChange(!isChange);
+    });
+    (0,react__WEBPACK_IMPORTED_MODULE_1__.useEffect)(() => {
+        axios__WEBPACK_IMPORTED_MODULE_0___default().post("http://localhost:4300/form/post", noteData)
             .then((response) => console.log(response))
             .catch((error) => console.log(error));
-        // setNoteData("");
-    });
+    }, [isChange]);
     return (react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_3__.default, { fluid: true, className: "formData" },
         react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_4__.default, null,
             react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.default, { sm: 6, className: "form-group" },
@@ -259,10 +321,25 @@ const NotebookData = () => {
                 react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", { type: "text", className: "form-control", value: urlLink.toString() }),
                 react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", { className: "form-control", placeholder: "enter a title of choosen link ", type: "text", ref: titleRef }),
                 react__WEBPACK_IMPORTED_MODULE_1__.createElement("label", { className: "text-primary" }, "Select Category"),
-                react__WEBPACK_IMPORTED_MODULE_1__.createElement("select", { placeholder: "select a category", ref: categoryRef, className: "form-control", name: "category", id: "" },
-                    react__WEBPACK_IMPORTED_MODULE_1__.createElement("option", { value: "" }, "untitled"),
-                    react__WEBPACK_IMPORTED_MODULE_1__.createElement("option", { value: "Favourites" }, "Favourites"),
-                    react__WEBPACK_IMPORTED_MODULE_1__.createElement("option", { value: "" })),
+                react__WEBPACK_IMPORTED_MODULE_1__.createElement("select", { placeholder: "select a category", ref: categoryRef, className: "form-control", name: "category", id: "" }, officialCategory.map((category) => {
+                    // const splitCategory: string[] = category.split("");
+                    // const capitalize: string[] = splitCategory.map(
+                    //   (category: string, ind: number) => {
+                    //     console.log(`object`);
+                    //     if (ind == 0) {
+                    //       category.toUpperCase();
+                    //     }
+                    //     return category;
+                    //   }
+                    // );
+                    // let mainCategory: string = "";
+                    // capitalize.forEach((categoryString: string): void => {
+                    //   mainCategory += categoryString;
+                    // });
+                    // console.log({ mainCategory });
+                    return react__WEBPACK_IMPORTED_MODULE_1__.createElement("option", { value: category }, category.toUpperCase());
+                })),
+                react__WEBPACK_IMPORTED_MODULE_1__.createElement("label", { className: "text-primary" }, "Enter a category"),
                 react__WEBPACK_IMPORTED_MODULE_1__.createElement("input", { type: "text", className: "form-control", placeholder: "enter your own category", ref: newCategoryRef })),
             react__WEBPACK_IMPORTED_MODULE_1__.createElement(react_bootstrap__WEBPACK_IMPORTED_MODULE_5__.default, { sm: 6 },
                 react__WEBPACK_IMPORTED_MODULE_1__.createElement("label", { className: "text-primary", htmlFor: "" }, "Description"),

@@ -18,8 +18,5 @@ const NotebookDataSchema = new Schema({
     type: String,
     // required: true,
   },
-  newCategory: {
-    type: String,
-  },
 });
 module.exports = mongoose.model("NotebookData", NotebookDataSchema);

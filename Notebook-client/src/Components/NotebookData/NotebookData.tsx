@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import "./index.css";
 interface InoteData {
@@ -9,7 +9,13 @@ interface InoteData {
   category: String;
   newCategory?: String;
 }
+// interface iavailableCategory{
+//   category: [string];
+// }
 const NotebookData = () => {
+  //states declarations
+  const [officialCategory, setofficialCategory] = useState<string[]>([""]);
+  const [isChange, setisChange] = useState<Boolean>(false);
   const [noteData, setNoteData] = useState<InoteData>({} as InoteData);
   const [urlLink, seturlLink] = useState<String>("");
   const titleRef = useRef<HTMLInputElement>();
@@ -20,6 +26,20 @@ const NotebookData = () => {
     console.log(tabs[0].url);
     seturlLink(tabs[0].url);
   });
+
+  //loading official category
+  useEffect(() => {
+    axios
+      .get("http://localhost:4300/official/get")
+      .then((response) => {
+        const data = response.data.data.availableCategory;
+        // console.log({ response: response.data.data.availableCategory}); //log to the console of official category
+        setofficialCategory(data);
+      })
+      .catch((error) => console.error(error));
+  }, []);
+
+  //post category to the browser
   const handleSubmit = async (): Promise<void> => {
     setNoteData({
       title: (titleRef.current as HTMLInputElement).value,
@@ -28,16 +48,14 @@ const NotebookData = () => {
       category: (categoryRef.current as HTMLSelectElement).value,
       newCategory: (newCategoryRef.current as HTMLInputElement).value,
     });
-    console.log("this is noteData", noteData);
-    // const {newCategory}=noteData;
-
-    console.log("i am clicked");
+    setisChange(!isChange);
+  };
+  useEffect(() => {
     axios
-      .post("http://localhost:3400/form/", noteData)
+      .post("http://localhost:4300/form/post", noteData)
       .then((response) => console.log(response))
       .catch((error) => console.log(error));
-    // setNoteData("");
-  };
+  }, [isChange]);
   return (
     <Container fluid className="formData">
       <Row>
@@ -49,9 +67,6 @@ const NotebookData = () => {
             value={urlLink.toString()}
           />
 
-          {/* <label className="text-primary" htmlFor="">
-            Title
-          </label> */}
           <input
             className="form-control"
             placeholder="enter a title of choosen link "
@@ -59,6 +74,7 @@ const NotebookData = () => {
             ref={titleRef}
           ></input>
           <label className="text-primary">Select Category</label>
+
           <select
             placeholder="select a category"
             ref={categoryRef}
@@ -66,11 +82,26 @@ const NotebookData = () => {
             name="category"
             id=""
           >
-            <option value="">untitled</option>
-            <option value="Favourites">Favourites</option>
-            <option value=""></option>
+            {officialCategory.map((category) => {
+              // const splitCategory: string[] = category.split("");
+              // const capitalize: string[] = splitCategory.map(
+              //   (category: string, ind: number) => {
+              //     console.log(`object`);
+              //     if (ind == 0) {
+              //       category.toUpperCase();
+              //     }
+              //     return category;
+              //   }
+              // );
+              // let mainCategory: string = "";
+              // capitalize.forEach((categoryString: string): void => {
+              //   mainCategory += categoryString;
+              // });
+              // console.log({ mainCategory });
+              return <option value={category}>{category.toUpperCase()}</option>;
+            })}
           </select>
-          {/* <label className="text-primary">Enter a category</label> */}
+          <label className="text-primary">Enter a category</label>
           <input
             type="text"
             className="form-control"

@@ -1,11 +1,15 @@
 const express = require("express");
-const router = express.Router();
+const route = express.Router();
 const {
   NotebookDataPostcontroller,
   getNoteBookData,
   updateNoteBookData,
+  deleteNotebookData,
+  googleLogin,
 } = require("../Controller/NoteBookData");
-router.post("/", NotebookDataPostcontroller);
-router.get("/", getNoteBookData);
-router.put("/:id", updateNoteBookData);
-module.exports = router;
+route.post("/post", NotebookDataPostcontroller);
+route.get("/noteLists", getNoteBookData);
+route.get("/login", googleLogin);
+route.put("/:id", updateNoteBookData);
+route.put("/delete/:id", deleteNotebookData);
+module.exports = route;
