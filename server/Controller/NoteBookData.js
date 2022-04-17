@@ -184,10 +184,89 @@ const deleteNotebookData = async (req, res) => {
     });
   }
 };
+
+//get all bookmark by category
+const getAllBookmarksByCategoryController = async (req, res) => {
+  try {
+    const getAllCategoryAvailable = await Official.find ().select ("-_id") //find all available category in the website
+    if (getAllCategoryAvailable.length != 0) { //if category found then it will execute
+      const categories = getAllCategoryAvailable[0].availableCategory
+      let allBookMarks = [];
+      let storeIndex = 0; //for count the store index counting
+      for (category of categories) { //get all bookmark data from database and give the data into a database format by category
+        const findPost = await NotebookData.find ({ //find post by Category
+          category
+        }).select (
+          "-__v"
+        )
+        if (findPost.length != 0) {
+          allBookMarks[storeIndex] = {
+            category,
+            bookmarksItem: findPost
+          }
+          storeIndex++;
+        }
+      }
+      if (Object.values (allBookMarks[0]).length != 0) { //if bookmarks found then it will happen
+        res.json ({
+          message: "Bookmarks found",
+          data: allBookMarks
+        })
+      }else {
+        res.json ({
+          message: "No bookmarks found",
+          data: null
+        })
+      }
+    }else {
+      res.json ({
+        message: "Category not found",
+        data: null
+      })
+    }
+  }catch (err) {
+    console.log(err)
+    res.json ({
+      message: err.message,
+      data: null
+    })
+  }
+}
+
+//get bookmark by id 
+const getBookmarkById = async (req, res) => {
+  try {
+      const {id:bookMarkId} =req.params //get the bookmark id from path params 
+      const findBookmark = await NotebookData.findOne (
+        {
+          _id: bookMarkId
+        }
+      ).select ("-__v")
+      if (Object.values(findBookmark).length != 0) {
+        res.json ({
+          message: "Bookmark details  found",
+          data: findBookmark
+        })
+      }else {
+        res.json ({
+          message: "Bookmark details not found",
+          data: null
+        })
+      }
+  }catch (err) {
+    res.json ({
+      message: err.message,
+      data: null
+    })
+  }
+}
+
 module.exports = {
   NotebookDataPostcontroller,
   getNoteBookData,
   updateNoteBookData,
   googleLogin,
   deleteNotebookData,
+  getAllBookmarksByCategoryController,
+  getBookmarkById
 };

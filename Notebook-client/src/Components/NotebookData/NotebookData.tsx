@@ -12,7 +12,10 @@ interface InoteData {
 // interface iavailableCategory{
 //   category: [string];
 // }
-const NotebookData = () => {
+const NotebookData = ({
+  setIsModified,
+  isModified
+}) => {
   //states declarations
   const [officialCategory, setofficialCategory] = useState<string[]>([""]);
   const [isChange, setisChange] = useState<Boolean>(false);
@@ -37,7 +40,7 @@ const NotebookData = () => {
         setofficialCategory(data);
       })
       .catch((error) => console.error(error));
-  }, []);
+  }, [isChange]);
 
   //post category to the browser
   const handleSubmit = async (): Promise<void> => {
@@ -49,12 +52,13 @@ const NotebookData = () => {
       newCategory: (newCategoryRef.current as HTMLInputElement).value,
     });
     setisChange(!isChange);
-  };
+  }
   useEffect(() => {
     axios
       .post("http://localhost:4300/form/post", noteData)
       .then((response) => console.log(response))
       .catch((error) => console.log(error));
+      setIsModified (!isModified)
   }, [isChange]);
   return (
     <Container fluid className="formData">
