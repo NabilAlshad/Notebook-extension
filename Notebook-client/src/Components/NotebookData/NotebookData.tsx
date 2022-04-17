@@ -135,4 +135,4 @@ const NotebookData = ({
   );
 };
 
-export default NotebookData;
+export default React.memo (NotebookData);

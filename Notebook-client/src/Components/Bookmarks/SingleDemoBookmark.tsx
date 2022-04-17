@@ -1,14 +1,18 @@
-import React from 'react'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import React, {useState} from 'react'
+import ShowSingleBookmarks from './SingleDemoBookmark/ShowSingleBookmarks'
 
 const SingleDemoBookmark = ({
     bookmark
 }) => {
-    console.log(bookmark)
+    // console.log(bookmark)
+    const [isUpdate, setIsUpdate] = useState <boolean> (false)
+    const [hello, setHello] = useState <string> ("")
+    
   return (
-    <div>
-        <h1>{bookmark.title}</h1>
-        <h1>{bookmark.description}</h1>
-    </div>
+     <>
+      <ShowSingleBookmarks bookmark={bookmark}/> 
+    </>
   )
 }
 
