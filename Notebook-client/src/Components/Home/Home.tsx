@@ -3,6 +3,7 @@ import React, {useState} from "react";
 import NotebookData from "../NotebookData/NotebookData";
 import NoteLists from "../NoteLists/NoteLists";
 
+
 const Home = () => {
   let currentTab = chrome.tabs.query(
     { currentWindow: true, active: true },
@@ -18,12 +19,10 @@ const Home = () => {
   const [isModified, setIsModified] = useState<boolean>(false)
   return (
     <div>
-      {/* <p>{currentTab}</p> */}
       <NotebookData isModified = {isModified} setIsModified = {setIsModified}></NotebookData>
       <NoteLists isModified = {isModified}></NoteLists>
-      {/* <button>Login with</button> */}
     </div>
   );
 };
 
-export default Home;
+export default React.memo (Home);

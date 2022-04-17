@@ -10,8 +10,7 @@ interface iNoteLists {
 }
 [];
 
-
-export default function ({isModified}) {
+const NoteLists = ({isModified}) => {
   const [lists, setLists] = useState<iNoteLists>();
   useEffect(() => {
     axios
@@ -32,3 +31,6 @@ export default function ({isModified}) {
     </div>
   );
 }
+
+export default React.memo (NoteLists)
+

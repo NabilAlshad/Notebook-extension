@@ -83,4 +83,4 @@ const AllBookmarks: ({
   )
 }
 
-export default AllBookmarks
+export default React.memo (AllBookmarks)

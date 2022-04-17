@@ -1,5 +1,6 @@
 import React from 'react'
-import { Accordion } from 'react-bootstrap'
+import { Accordion, Table } from 'react-bootstrap'
+import  "./BookMarkWithCategory.css"
 import SingleDemoBookmark from './SingleDemoBookmark'
 type BookmarksItem = [{
     _id: object | string,
@@ -26,22 +27,31 @@ const BookMarkWithCategory = ({
         bookmarksItem:BookmarksItem
     }
 }) => {
-    console.log(`I am rendered`)
   return (
     <div>
-        <Accordion defaultActiveKey="0">
+        <Accordion >
             <Accordion.Item eventKey="0">
-                <Accordion.Header>Category Name: {category}</Accordion.Header>
+                <Accordion.Header className = {`title`} >Category Name: {category}</Accordion.Header>
                 <Accordion.Body>
-                    {
-                        bookmarksItem.map((bookmark: Books, ind: number) => {
-                            return (
-                                <Accordion.Body>
+                    <Table striped bordered hover>
+                        <thead>
+                            <tr>
+                            <th>Title</th>
+                            <th>Delete</th>
+                            <th>Update</th>
+                            <th>Show Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {
+                            bookmarksItem.map((bookmark: Books, ind: number) => {
+                                return (
                                     <SingleDemoBookmark key = {ind} bookmark={bookmark}/>
-                                </Accordion.Body>
-                            )
-                        }) 
-                    }
+                                    )
+                                }) 
+                            }
+                        </tbody>
+                    </Table>
                 </Accordion.Body>
             </Accordion.Item>
         </Accordion>
