@@ -23,12 +23,12 @@ export default function ({isModified}) {
         setLists(data);
       })
       .catch((error) => console.error(error));
-  }, [isModified]);
+  }, []);
   
   return (
     <div>
       <h1>All Bookmarks</h1>
-      <AllBookmarks/>
+      <AllBookmarks isModified = {isModified}/>
     </div>
   );
 }

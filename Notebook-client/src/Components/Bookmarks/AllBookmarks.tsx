@@ -36,7 +36,9 @@ type Bookmark = [
   }
 ]
 
-const AllBookmarks: () => JSX.Element = () => {
+const AllBookmarks: ({
+  isModified:boolean
+}) => JSX.Element = (isModified) => {
   const [bookMarkData, setBookMarkData] = useState <Bookmark | []> ([])
   useEffect (():void => {
     (async (): Promise<void> => {
@@ -55,7 +57,7 @@ const AllBookmarks: () => JSX.Element = () => {
           setBookMarkData (responseData)
         }
     })()
-  }, [])
+  }, [isModified])
   return (
     <div>
         {
