@@ -170,17 +170,20 @@ const deleteNotebookData = async (req, res) => {
     });
 
     if (deleteData.deletedCount) {
-      res.status(202).json({
+      res.json({
         message: "successfully deleted the notebook",
+        status: 202
       });
     } else {
-      res.status(406).json({
+      res.json({
         message: "deletion failed",
+        status: 406
       });
     }
   } catch (error) {
-    res.status(406).json({
+    res.json({
       message: error.message,
+      status: 406
     });
   }
 };
@@ -245,18 +248,18 @@ const getBookmarkById = async (req, res) => {
       if (Object.values(findBookmark).length != 0) {
         res.json ({
           message: "Bookmark details  found",
-          data: findBookmark
+          bookmark: findBookmark
         })
       }else {
         res.json ({
           message: "Bookmark details not found",
-          data: null
+          bookmark: null
         })
       }
   }catch (err) {
     res.json ({
       message: err.message,
-      data: null
+      bookmark: null
     })
   }
 }

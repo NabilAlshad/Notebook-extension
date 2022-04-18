@@ -20,7 +20,7 @@ const Home = () => {
   return (
     <div>
       <NotebookData isModified = {isModified} setIsModified = {setIsModified}></NotebookData>
-      <NoteLists isModified = {isModified}></NoteLists>
+      <NoteLists isModified = {isModified}  setIsModified = {setIsModified}></NoteLists>
     </div>
   );
 };

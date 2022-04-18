@@ -36,9 +36,7 @@ type Bookmark = [
   }
 ]
 
-const AllBookmarks: ({
-  isModified:boolean
-}) => JSX.Element = (isModified) => {
+const AllBookmarks = ({isModified, setIsModified}) => {
   const [bookMarkData, setBookMarkData] = useState <Bookmark | []> ([])
   useEffect (():void => {
     (async (): Promise<void> => {
@@ -68,7 +66,7 @@ const AllBookmarks: ({
                 bookMarkData.map ((bookmark:BookmarkItem, ind:number) => {
                   return (
                     <>
-                      <BookMarkWithCategory key = {ind} bookmarks = {bookmark} />
+                      <BookMarkWithCategory key = {ind} bookmarks = {bookmark} isModified = {isModified}setIsModified = {setIsModified} />
                     </>
                   )
                 })
