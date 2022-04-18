@@ -1,19 +1,67 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import React from 'react'
+import axios from 'axios';
+import React , {useState} from 'react'
+import UpdateModal from '../UpdateModal/UpdateModal';
 
-const ShowSingleBookmarks = ({bookmark}) => {
+
+const ShowSingleBookmarks = ({bookmark, setIsModified, isModified}) => {
+  const [updateData, setUpdateData] = useState <object>({})
+  const [modalShow, setModalShow] = useState <boolean>(false);
+  const [show, setShow] = useState <boolean> (false);
+  const deleteHandler=  async (e, id): Promise <void> => {
+    e.preventDefault();
+    const {data: {
+      message,
+      status
+    }} = await axios.put (`http://localhost:4300/form/delete/${id}`)
+    if (status == 202) {
+      setIsModified (!isModified)
+      alert(`Delete Successfully`)
+    }else {
+      alert(`Delete failed`)
+    }
+  }
+  const handleClose = () => setShow(false);
+  const updateHandler = (e, bookmark) => {
+    e.preventDefault();
+    setShow (true);
+    setUpdateData (bookmark)
+
+  }
   return (
-    <tr>
-        <td>
-          <a target = "_blank" href= {bookmark.link}>{bookmark.title}</a>
-        </td>
-        <td>
-          <FontAwesomeIcon icon ={["fas", "ban"]} />
-        </td>
-        <td>
-          <FontAwesomeIcon icon ={["fas", "file-pen"]} />
-        </td>
-    </tr>
+    <>
+      <tr>
+          <td>
+            <a target = "_blank" href= {bookmark.link}>{bookmark.title}</a>
+          </td>
+          <td> 
+            <button onClick={(e) => deleteHandler (e, bookmark._id) } >
+              <FontAwesomeIcon icon ={["fas", "ban"]} />
+            </button>
+          </td>
+          <td>   
+            <button onClick={(e) => updateHandler (e, bookmark) } >
+              <FontAwesomeIcon icon ={["fas", "file-pen"]} />
+            </button>
+          </td>
+          <td style = {{textAlign: "justify"} }>
+            {bookmark.description}
+          </td>
+      </tr>
+      {/* {
+        Object.values (updateData).length != 0 
+        &&
+        <UpdateModal 
+          show={modalShow}
+          onHide={() => setModalShow(false)}
+        />
+      } */}
+      <UpdateModal 
+          show = {show}
+          handleClose = {handleClose}
+          bookmark = {updateData}
+        />
+    </>
   )
 }
 

@@ -3,7 +3,9 @@ import React, {useState} from 'react'
 import ShowSingleBookmarks from './SingleDemoBookmark/ShowSingleBookmarks'
 
 const SingleDemoBookmark = ({
-    bookmark
+    bookmark,
+    setIsModified,
+    isModified
 }) => {
     // console.log(bookmark)
     const [isUpdate, setIsUpdate] = useState <boolean> (false)
@@ -11,7 +13,7 @@ const SingleDemoBookmark = ({
     
   return (
      <>
-      <ShowSingleBookmarks bookmark={bookmark}/> 
+      <ShowSingleBookmarks bookmark={bookmark} setIsModified = {setIsModified} isModified = {isModified}/> 
     </>
   )
 }

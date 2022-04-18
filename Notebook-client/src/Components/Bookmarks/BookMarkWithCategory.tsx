@@ -20,12 +20,16 @@ const BookMarkWithCategory = ({
     bookmarks: {
         category,
         bookmarksItem
-    }
+    },
+    setIsModified,
+    isModified
 }: {
     bookmarks: {
         category: string,
         bookmarksItem:BookmarksItem
-    }
+    },
+    setIsModified: Function,
+    isModified: boolean
 }) => {
   return (
     <div>
@@ -46,7 +50,7 @@ const BookMarkWithCategory = ({
                             {
                             bookmarksItem.map((bookmark: Books, ind: number) => {
                                 return (
-                                    <SingleDemoBookmark key = {ind} bookmark={bookmark}/>
+                                    <SingleDemoBookmark key = {ind} bookmark={bookmark} setIsModified = {setIsModified} isModified = {isModified}/>
                                     )
                                 }) 
                             }

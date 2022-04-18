@@ -10,7 +10,7 @@ interface iNoteLists {
 }
 [];
 
-const NoteLists = ({isModified}) => {
+const NoteLists = ({isModified, setIsModified}) => {
   const [lists, setLists] = useState<iNoteLists>();
   useEffect(() => {
     axios
@@ -27,7 +27,7 @@ const NoteLists = ({isModified}) => {
   return (
     <div>
       <h1>All Bookmarks</h1>
-      <AllBookmarks isModified = {isModified}/>
+      <AllBookmarks isModified = {isModified}  setIsModified = {setIsModified}/>
     </div>
   );
 }

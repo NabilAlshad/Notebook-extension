@@ -12,8 +12,8 @@ const {
 route.post("/post", NotebookDataPostcontroller);
 route.get("/noteLists", getNoteBookData);
 route.get("/login", googleLogin);
-route.put("/:id", updateNoteBookData);
+route.put("/update/:id", updateNoteBookData);
 route.put("/delete/:id", deleteNotebookData);
 route.get("/bookmarks", getAllBookmarksByCategoryController);
-route.get("/bookmarks/:id", getBookmarkById);
+route.get("/bookmark/:id", getBookmarkById);
 module.exports = route;
