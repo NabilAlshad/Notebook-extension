@@ -7,7 +7,7 @@ const {
   deleteNotebookData,
   googleLogin,
   getAllBookmarksByCategoryController,
-  getBookmarkById
+  getBookmarkById,
 } = require("../Controller/NoteBookData");
 route.post("/post", NotebookDataPostcontroller);
 route.get("/noteLists", getNoteBookData);

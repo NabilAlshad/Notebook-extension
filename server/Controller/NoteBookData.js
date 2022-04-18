@@ -132,13 +132,17 @@ const getNoteBookData = async (req, res) => {
 };
 const updateNoteBookData = async (req, res) => {
   try {
+    // console.log(req.params.id);
+    // console.log(req.body);
     const updateDataId = req.params.id;
     const updateNoteBook = await NotebookData.updateOne(
       {
         _id: updateDataId,
       }, //query
       {
-        $set: req.body,
+        $set: {
+          ...req.body,
+        },
       }, //update
       {
         multi: true,
@@ -146,6 +150,7 @@ const updateNoteBookData = async (req, res) => {
     );
     // console.log(updateNoteBook);
     if (updateNoteBook.acknowledged) {
+      console.log(`object`);
       res.status(202).json({
         mesasge: "Notbook has successfully updated",
       });
@@ -172,18 +177,18 @@ const deleteNotebookData = async (req, res) => {
     if (deleteData.deletedCount) {
       res.json({
         message: "successfully deleted the notebook",
-        status: 202
+        status: 202,
       });
     } else {
       res.json({
         message: "deletion failed",
-        status: 406
+        status: 406,
       });
     }
   } catch (error) {
     res.json({
       message: error.message,
-      status: 406
+      status: 406,
     });
   }
 };
@@ -191,78 +196,78 @@ const deleteNotebookData = async (req, res) => {
 //get all bookmark by category
 const getAllBookmarksByCategoryController = async (req, res) => {
   try {
-    const getAllCategoryAvailable = await Official.find ().select ("-_id") //find all available category in the website
-    if (getAllCategoryAvailable.length != 0) { //if category found then it will execute
-      const categories = getAllCategoryAvailable[0].availableCategory
+    const getAllCategoryAvailable = await Official.find().select("-_id"); //find all available category in the website
+    if (getAllCategoryAvailable.length != 0) {
+      //if category found then it will execute
+      const categories = getAllCategoryAvailable[0].availableCategory;
       let allBookMarks = [];
       let storeIndex = 0; //for count the store index counting
-      for (category of categories) { //get all bookmark data from database and give the data into a database format by category
-        const findPost = await NotebookData.find ({ //find post by Category
-          category
-        }).select (
-          "-__v"
-        )
+      for (category of categories) {
+        //get all bookmark data from database and give the data into a database format by category
+        const findPost = await NotebookData.find({
+          //find post by Category
+          category,
+        }).select("-__v");
         if (findPost.length != 0) {
           allBookMarks[storeIndex] = {
             category,
-            bookmarksItem: findPost
-          }
+            bookmarksItem: findPost,
+          };
           storeIndex++;
         }
       }
-      if (Object.values (allBookMarks[0]).length != 0) { //if bookmarks found then it will happen
-        res.json ({
+      if (Object.values(allBookMarks[0]).length != 0) {
+        //if bookmarks found then it will happen
+        res.json({
           message: "Bookmarks found",
-          data: allBookMarks
-        })
-      }else {
-        res.json ({
+          data: allBookMarks,
+        });
+      } else {
+        res.json({
           message: "No bookmarks found",
-          data: null
-        })
+          data: null,
+        });
       }
-    }else {
-      res.json ({
+    } else {
+      res.json({
         message: "Category not found",
-        data: null
-      })
+        data: null,
+      });
     }
-  }catch (err) {
-    console.log(err)
-    res.json ({
+  } catch (err) {
+    console.log(err);
+    res.json({
       message: err.message,
-      data: null
-    })
+      data: null,
+    });
   }
-}
+};
 
-//get bookmark by id 
+//get bookmark by id
 const getBookmarkById = async (req, res) => {
   try {
-      const {id:bookMarkId} =req.params //get the bookmark id from path params 
-      const findBookmark = await NotebookData.findOne (
-        {
-          _id: bookMarkId
-        }
-      ).select ("-__v")
-      if (Object.values(findBookmark).length != 0) {
-        res.json ({
-          message: "Bookmark details  found",
-          bookmark: findBookmark
-        })
-      }else {
-        res.json ({
-          message: "Bookmark details not found",
-          bookmark: null
-        })
-      }
-  }catch (err) {
-    res.json ({
+    const { id: bookMarkId } = req.params; //get the bookmark id from path params
+    const findBookmark = await NotebookData.findOne({
+      _id: bookMarkId,
+    }).select("-__v");
+    if (Object.values(findBookmark).length != 0) {
+      res.json({
+        message: "Bookmark details  found",
+        bookmark: findBookmark,
+      });
+    } else {
+      res.json({
+        message: "Bookmark details not found",
+        bookmark: null,
+      });
+    }
+  } catch (err) {
+    res.json({
       message: err.message,
-      bookmark: null
-    })
+      bookmark: null,
+    });
   }
-}
+};
 
 module.exports = {
   NotebookDataPostcontroller,
@@ -271,5 +276,5 @@ module.exports = {
   googleLogin,
   deleteNotebookData,
   getAllBookmarksByCategoryController,
-  getBookmarkById
+  getBookmarkById,
 };
