@@ -3,13 +3,14 @@ import React, { useEffect, useState } from "react";
 import { Button, Form, Modal } from "react-bootstrap";
 import "./UpdateModal.css";
 const UpdateModal = ({ show, handleClose, bookmark }) => {
-  const { title, category, description } = bookmark;
+  // const { title, category, description } = bookmark;
   const [bookmarkData, setBookmarkData] = useState({
     title: "",
     description: "",
     category: "",
   });
-  console.log("bookmark data is", );
+  const updateHandler = (e) => {
+    e.preventDefault();
     axios
       .put(`http://localhost:4300/form/update/${bookmark._id}`, bookmarkData)
       .then((response) => {
@@ -18,22 +19,13 @@ const UpdateModal = ({ show, handleClose, bookmark }) => {
       .catch((err) => {
         console.log(err.message);
       });
-  };
+  }
+
   useEffect(() => {
     (async () => {
-      const { data } = await axios.get(
-        `http://localhost:4300/form/bookmark/${bookmark._id}`
-      );
-      console.log({ data });
-      // if (data) {
-      //     setBookmarkData ({
-      //         title: getBookmark.title,
-      //         description: getBookmark.description,
-      //         link: getBookmark.link,
-      //         category: getBookmark.category
-      //     })
-      // }
-      console.log(data);
+      // const { data } = await axios.get(
+      //   `http://localhost:4300/form/bookmark/${bookmark._id}`
+      // );
     })();
   }, []);
   return (

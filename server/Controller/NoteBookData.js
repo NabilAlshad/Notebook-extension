@@ -132,17 +132,28 @@ const getNoteBookData = async (req, res) => {
 };
 const updateNoteBookData = async (req, res) => {
   try {
-    // console.log(req.params.id);
-    // console.log(req.body);
     const updateDataId = req.params.id;
+    const {
+      title,
+      description,
+      category
+    } = req.body;
+    const struct = {};
+    if (title) {
+      struct["title"] = title
+    }
+    if (description) {
+      struct["description"] = description
+    }
+    if (category) {
+      struct["category"] = category
+    }
     const updateNoteBook = await NotebookData.updateOne(
       {
         _id: updateDataId,
       }, //query
       {
-        $set: {
-          ...req.body,
-        },
+        $set: struct,
       }, //update
       {
         multi: true,
