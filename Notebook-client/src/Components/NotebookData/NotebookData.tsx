@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row } from "react-bootstrap";
 import "./index.css";
 interface InoteData {
@@ -9,118 +9,130 @@ interface InoteData {
   category: String;
   newCategory?: String;
 }
-// interface iavailableCategory{
-//   category: [string];
-// }
-const NotebookData = ({
-  setIsModified,
-  isModified
-}) => {
-  //states declarations
-  const [officialCategory, setofficialCategory] = useState<string[]>([""]);
+const NotebookData = ({ setIsModified, isModified }) => {
+  const [officialCategory, setofficialCategory] = useState<string[]>([]);
+  const [notification, setNotification] = useState<string>(""); //to show it into screen as a message
   const [isChange, setisChange] = useState<Boolean>(false);
-  const [noteData, setNoteData] = useState<InoteData>({} as InoteData);
-  const [urlLink, seturlLink] = useState<String>("");
-  const titleRef = useRef<HTMLInputElement>();
-  const descriptionRef = useRef<HTMLTextAreaElement>();
-  const categoryRef = useRef<HTMLSelectElement>();
-  const newCategoryRef = useRef<HTMLInputElement>();
-  chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
-    console.log(tabs[0].url);
-    seturlLink(tabs[0].url);
-  });
 
-  //loading official category
+  const [urlLink, seturlLink] = useState<string>("");
+  const resetState = {
+    title: "",
+    description: "",
+    link: "",
+    category: "",
+    newCategory: "",
+  };
+  const [noteData, setNoteData] = useState(resetState);
+
   useEffect(() => {
     axios
       .get("http://localhost:4300/official/get")
       .then((response) => {
         const data = response.data.data.availableCategory;
-        // console.log({ response: response.data.data.availableCategory}); //log to the console of official category
+
         setofficialCategory(data);
       })
       .catch((error) => console.error(error));
   }, [isChange]);
-
-  //post category to the browser
   const handleSubmit = async (): Promise<void> => {
+    try {
+      const response = await axios.post(
+        "http://localhost:4300/form/post",
+        noteData
+      );
+      if (response.data.status === 201) {
+        setNotification("Data saved successfully");
+        console.log(notification);
+      }
+      if (response.data.status === 406) {
+        setNotification(response.data.message);
+      }
+    } catch (error) {
+      console.log(error.message);
+      setNotification(error.message);
+    }
+
+    setIsModified(!isModified);
     setNoteData({
-      title: (titleRef.current as HTMLInputElement).value,
-      description: (descriptionRef.current as HTMLTextAreaElement).value,
-      link: urlLink,
-      category: (categoryRef.current as HTMLSelectElement).value,
-      newCategory: (newCategoryRef.current as HTMLInputElement).value,
+      ...resetState,
+      link: urlLink.toString(),
     });
     setisChange(!isChange);
-  }
+  };
+  // useEffect(() => {
+  //   axios
+  //     .post("http://localhost:4300/form/post", noteData)
+  //     .then((response) => console.log(response))
+  //     .catch((error) => console.log(error));
+  //   setIsModified(!isModified);
+  //   setNoteData(resetState);
+  //   // setisChange(!isChange);
+  // }, [isChange]);
   useEffect(() => {
-    axios
-      .post("http://localhost:4300/form/post", noteData)
-      .then((response) => console.log(response))
-      .catch((error) => console.log(error));
-      setIsModified (!isModified)
+    chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
+      seturlLink(tabs[0].url);
+      setNoteData({ ...noteData, link: tabs[0].url });
+    });
   }, [isChange]);
   return (
     <Container fluid className="formData">
       <Row>
         <Col sm={6} className="form-group">
-          <label className="text-primary">Current Tab Link</label>
+          <label className="label-field">Current Tab Link</label>
           <input
             type="text"
             className="form-control"
-            value={urlLink.toString()}
+            value={noteData.link}
+            onChange={(e) => setNoteData({ ...noteData, link: e.target.value })}
           />
 
           <input
             className="form-control"
             placeholder="enter a title of choosen link "
             type="text"
-            ref={titleRef}
+            value={noteData.title}
+            onChange={(e) =>
+              setNoteData({ ...noteData, title: e.target.value })
+            }
           ></input>
-          <label className="text-primary">Select Category</label>
+          <label className="label-field">Select Category</label>
 
           <select
             placeholder="select a category"
-            ref={categoryRef}
+            value={noteData.category}
+            onChange={(e) =>
+              setNoteData({ ...noteData, category: e.target.value })
+            }
             className="form-control"
             name="category"
             id=""
           >
             {officialCategory.map((category) => {
-              // const splitCategory: string[] = category.split("");
-              // const capitalize: string[] = splitCategory.map(
-              //   (category: string, ind: number) => {
-              //     console.log(`object`);
-              //     if (ind == 0) {
-              //       category.toUpperCase();
-              //     }
-              //     return category;
-              //   }
-              // );
-              // let mainCategory: string = "";
-              // capitalize.forEach((categoryString: string): void => {
-              //   mainCategory += categoryString;
-              // });
-              // console.log({ mainCategory });
               return <option value={category}>{category.toUpperCase()}</option>;
             })}
           </select>
-          <label className="text-primary">Enter a category</label>
+          <label className="label-field">Enter a category</label>
           <input
             type="text"
             className="form-control"
             placeholder="enter your own category"
-            ref={newCategoryRef}
+            value={noteData.newCategory}
+            onChange={(e) =>
+              setNoteData({ ...noteData, newCategory: e.target.value })
+            }
           />
         </Col>
         <Col sm={6}>
-          <label className="text-primary" htmlFor="">
+          <label className="label-field" htmlFor="">
             Description
           </label>
           <textarea
             className="form-control"
             placeholder="write some note ...."
-            ref={descriptionRef}
+            value={noteData.description}
+            onChange={(e) =>
+              setNoteData({ ...noteData, description: e.target.value })
+            }
             name=""
             id=""
             cols={20}
@@ -130,9 +142,12 @@ const NotebookData = ({
         <button onClick={handleSubmit} className="submit shadow-lg">
           submit
         </button>
+
+        {/* message show part */}
+        <p>{notification}</p>
       </Row>
     </Container>
   );
 };
 
-export default React.memo (NotebookData);
+export default React.memo(NotebookData);

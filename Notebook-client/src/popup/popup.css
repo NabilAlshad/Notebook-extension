@@ -1,5 +1,8 @@
 body {
-  /* background-color: #1c1c1c; */
-  width: 700px;
-  height: 700px;
+  background-color: rgb(188, 210, 211);
+  width: 600px;
+  max-height: 100%;
+  overflow: hidden;
+  padding: 2%;
+  padding-bottom: 4%;
 }

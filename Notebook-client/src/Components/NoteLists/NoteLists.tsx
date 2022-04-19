@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import AllBookmarks from  "../Bookmarks/AllBookmarks"
+import AllBookmarks from "../Bookmarks/AllBookmarks";
 interface iNoteLists {
   title: String;
   description: String;
@@ -10,7 +10,7 @@ interface iNoteLists {
 }
 [];
 
-const NoteLists = ({isModified, setIsModified}) => {
+const NoteLists = ({ isModified, setIsModified }) => {
   const [lists, setLists] = useState<iNoteLists>();
   useEffect(() => {
     axios
@@ -23,14 +23,13 @@ const NoteLists = ({isModified, setIsModified}) => {
       })
       .catch((error) => console.error(error));
   }, []);
-  
+
   return (
     <div>
-      <h1>All Bookmarks</h1>
-      <AllBookmarks isModified = {isModified}  setIsModified = {setIsModified}/>
+      <h1 className="text-center pt-2  underline">All Bookmarks</h1>
+      <AllBookmarks isModified={isModified} setIsModified={setIsModified} />
     </div>
   );
-}
+};
 
-export default React.memo (NoteLists)
-
+export default React.memo(NoteLists);

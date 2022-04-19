@@ -72,6 +72,7 @@ const NotebookDataPostcontroller = async (req, res) => {
         }, //update
         { multi: true }
       ); //addd a new category in the databse
+      console.log({ response: addNewCategoryInAvaialableOne, newCategory });
       if (addNewCategoryInAvaialableOne.modifiedCount != 0) {
         //if new category add succcessfully
         const noteDataDetails = new NotebookData({
@@ -80,22 +81,26 @@ const NotebookDataPostcontroller = async (req, res) => {
           category: newCategory.toLowerCase(),
         });
         const isSave = await noteDataDetails.save();
+
         if (isSave) {
           //id save successfully
-          res.status(201).json({
+          res.json({
             message: "Save successfully and add a new cateagory",
             post: noteDataDetails,
+            status: 201,
           });
         } else {
           res.json({
             message: "Bookmark save failed",
             post: null,
+            status: 406,
           });
         }
       } else {
         res.json({
           message: "New category add failed into the official data",
           post: null,
+          status: 406,
         });
       }
     } else {
@@ -105,18 +110,21 @@ const NotebookDataPostcontroller = async (req, res) => {
       console.log(isSave);
       if (isSave) {
         //id save successfully
-        res
-          .status(201)
-          .json({ message: "Save successfully", post: noteDataDetails });
+        res.json({
+          message: "Save successfully",
+          post: noteDataDetails,
+          status: 201,
+        });
       } else {
         res.json({
           message: "Bookmark save failed",
           post: null,
+          status: 406,
         });
       }
     }
   } catch (err) {
-    res.status(200).json({ message: err.message });
+    res.json({ message: err.message, status: 417, post: null });
   }
 };
 
@@ -133,20 +141,16 @@ const getNoteBookData = async (req, res) => {
 const updateNoteBookData = async (req, res) => {
   try {
     const updateDataId = req.params.id;
-    const {
-      title,
-      description,
-      category
-    } = req.body;
+    const { title, description, category } = req.body;
     const struct = {};
     if (title) {
-      struct["title"] = title
+      struct["title"] = title;
     }
     if (description) {
-      struct["description"] = description
+      struct["description"] = description;
     }
     if (category) {
-      struct["category"] = category
+      struct["category"] = category;
     }
     const updateNoteBook = await NotebookData.updateOne(
       {
