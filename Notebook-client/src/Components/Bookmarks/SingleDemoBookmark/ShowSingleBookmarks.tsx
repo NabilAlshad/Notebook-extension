@@ -6,8 +6,8 @@ import UpdateModal from '../UpdateModal/UpdateModal';
 
 const ShowSingleBookmarks = ({bookmark, setIsModified, isModified}) => {
   const [updateData, setUpdateData] = useState <object>({})
-  const [modalShow, setModalShow] = useState <boolean>(false);
   const [show, setShow] = useState <boolean> (false);
+  const [isClick, setIsClick] = useState <boolean> (false);
   const deleteHandler=  async (e, id): Promise <void> => {
     e.preventDefault();
     const {data: {
@@ -26,7 +26,7 @@ const ShowSingleBookmarks = ({bookmark, setIsModified, isModified}) => {
     e.preventDefault();
     setShow (true);
     setUpdateData (bookmark)
-
+    setIsClick (!isClick);
   }
   return (
     <>
@@ -48,18 +48,13 @@ const ShowSingleBookmarks = ({bookmark, setIsModified, isModified}) => {
             {bookmark.description}
           </td>
       </tr>
-      {/* {
-        Object.values (updateData).length != 0 
-        &&
-        <UpdateModal 
-          show={modalShow}
-          onHide={() => setModalShow(false)}
-        />
-      } */}
       <UpdateModal 
           show = {show}
           handleClose = {handleClose}
           bookmark = {updateData}
+          isClick = {isClick}
+          setIsModified = {setIsModified}
+          isModified = {isModified}
         />
     </>
   )

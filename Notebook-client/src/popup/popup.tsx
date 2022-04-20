@@ -14,7 +14,9 @@ import {
   faSquare,
   faCheckSquare,
   faFilePen,
-  faBan
+  faBan,
+  faCheckDouble,
+  faXmark
 } from '@fortawesome/free-solid-svg-icons'
 library.add(
   faCoffee,
@@ -24,7 +26,9 @@ library.add(
   faSquare,
   faCheckSquare,
   faFilePen,
-  faBan
+  faBan,
+  faCheckDouble,
+  faXmark
 )
 // library.add(faCoffee)
 const App: React.FC<{}> = () => {
