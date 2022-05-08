@@ -166,18 +166,21 @@ const updateNoteBookData = async (req, res) => {
     // console.log(updateNoteBook);
     if (updateNoteBook.acknowledged) {
       console.log(`object`);
-      res.status(202).json({
-        mesasge: "Notbook has successfully updated",
+      res.json({
+        message: "Notbook has successfully updated",
+        status: 202
       });
     } else {
-      res.status(406).json({
-        mesasge: "Notebook update failed",
+      res.json({
+        message: "Notebook update failed",
+        status: 406
       });
     }
   } catch (err) {
     console.log(err);
     res.status(406).json({
       mesasge: err.message,
+      status: 406
     });
   }
 };
