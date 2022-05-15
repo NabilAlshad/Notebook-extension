@@ -12,7 +12,6 @@ const Home = () => {
       // var currentTab = tabs[0].url;
     }
   );
-
   const googleLoginButton = () => {
     axios.get("");
   };
