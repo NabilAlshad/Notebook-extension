@@ -10,10 +10,10 @@ const mongoose = require("mongoose");
 var app = express();
 app.use(cors());
 app.use(logger("dev"));
-app.use(express.json());
+app.use(express.json({limit: "250mb"}));
 const port = 4300;
 
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true, limit: "250mb"}));
 //database connection
 mongoose
   .connect("mongodb://localhost:27017/Notebook", {
